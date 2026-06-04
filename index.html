@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HALO</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Consolas, monospace;
+    }
+
+    body{
+      background:#050505;
+      color:#00ff88;
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      overflow:hidden;
+    }
+
+    .container{
+      width:90%;
+      max-width:500px;
+      background:#0d0d0d;
+      border:1px solid #00ff88;
+      border-radius:15px;
+      padding:30px;
+      box-shadow:0 0 25px #00ff88;
+      text-align:center;
+      position:relative;
+    }
+
+    h1{
+      margin-bottom:15px;
+      text-shadow:0 0 10px #00ff88;
+    }
+
+    p{
+      color:#8affc1;
+      margin-bottom:20px;
+    }
+
+    button{
+      background:black;
+      color:#00ff88;
+      border:1px solid #00ff88;
+      padding:12px 25px;
+      font-size:16px;
+      border-radius:8px;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    button:hover{
+      background:#00ff88;
+      color:black;
+      box-shadow:0 0 20px #00ff88;
+    }
+
+    #hasil{
+      margin-top:25px;
+      text-align:left;
+      background:#111;
+      padding:15px;
+      border-radius:10px;
+      min-height:120px;
+      border:1px solid #00ff88;
+    }
+
+    .loading{
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink{
+      50%{
+        opacity:0.3;
+      }
+    }
+
+    a{
+      color:#00ffaa;
+      text-decoration:none;
+    }
+
+    a:hover{
+      text-shadow:0 0 10px #00ffaa;
+    }
+
+    .scanline{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:linear-gradient(
+        transparent 50%,
+        rgba(0,255,136,0.03) 50%
+      );
+      background-size:100% 4px;
+      pointer-events:none;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="scanline"></div>
+
+<div class="container">
+  <h1>HALO</h1>
+  <p>IH ORANG INI LAGI</p>
+
+  <button onclick="lacakLokasi()">COBA PENCET</button>
+
+  <div id="hasil">
+    Sistem siap...
+  </div>
+</div>
+
+<script>
+
+function lacakLokasi(){
+
+  const hasil = document.getElementById("hasil");
+
+  if(navigator.geolocation){
+
+    hasil.innerHTML = `
+      <div class="loading">
+        [ SYSTEM ] Menghubungkan ke GPS...
+      </div>
+    `;
+
+    navigator.geolocation.getCurrentPosition(
+
+      function(posisi){
+
+        const lat = posisi.coords.latitude;
+        const lon = posisi.coords.longitude;
+        const akurasi = posisi.coords.accuracy;
+
+        hasil.innerHTML = `
+          <p>> STATUS : CONNECTED</p>
+          <p>> LATITUDE : ${lat}</p>
+          <p>> LONGITUDE : ${lon}</p>
+          <p>> AKURASI : ${akurasi} meter</p>
+          <br>
+          <a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank">
+            [ OPEN GOOGLE MAPS ]
+          </a>
+        `;
+      },
+
+      function(error){
+
+        hasil.innerHTML = `
+          <p>> ERROR : SOALNYA KAMU JELEK</p>
+        `;
+      }
+
+    );
+
+  } else {
+
+    hasil.innerHTML = `
+      <p>> ERROR : Browser tidak mendukung GPS</p>
+    `;
+  }
+}
+
+</script>
+
+</body>
+</html>
